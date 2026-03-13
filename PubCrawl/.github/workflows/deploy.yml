@@ -2,7 +2,7 @@
 # Lucky 13 Pub Crawl — CI/CD
 #
 # Push to main  → provision infra (Bicep) + build + deploy to production
-# Pull request  → build + deploy to preview environment (uses stored token)
+# Pull request  → build + deploy to preview environment
 # PR closed     → tear down preview environment
 #
 # Required GitHub Secrets:
@@ -10,10 +10,7 @@
 #   AZURE_TENANT_ID           Azure AD tenant ID
 #   AZURE_SUBSCRIPTION_ID     Azure subscription ID
 #   AZURE_RESOURCE_GROUP      Target resource group name
-#
-# AZURE_STATIC_WEB_APPS_API_TOKEN is NOT required for main-branch deploys —
-# it is derived automatically from the Bicep output on every run.
-# Add it only if you need PR preview environments.
+#   AZURE_STATIC_WEB_APPS_API_TOKEN  SWA deployment token (from first Bicep run)
 # ─────────────────────────────────────────────────────────────────────────────
 
 name: Deploy Lucky 13 Pub Crawl
@@ -26,26 +23,23 @@ on:
     branches: [main]
 
 permissions:
-  id-token: write   # OIDC login
+  id-token: write
   contents: read
 
 env:
-  DOTNET_VERSION: '10.x'
+  DOTNET_VERSION: '10.0.x'
   PROJECT_PATH:   'PubCrawl/Client/PubCrawl.csproj'
   PUBLISH_PATH:   'PubCrawl/Client/bin/Release/net10.0/publish/wwwroot'
   BICEP_PATH:     'PubCrawl/IaC/biceps/main.bicep'
   BICEP_PARAMS:   'PubCrawl/IaC/biceps/main.parameters.prod.json'
 
-# ── 1. PROVISION ─────────────────────────────────────────────────────────────
-# Runs on every push to main. Deploys/updates the Azure Static Web App via
-# Bicep and surfaces the deployment token for the deploy job below.
 jobs:
+
+# ── 1. PROVISION ─────────────────────────────────────────────────────────────
   provision:
     name: Provision Infrastructure (Bicep)
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    outputs:
-      swa_token: ${{ steps.bicep.outputs.deploymentToken }}
 
     steps:
       - name: Checkout
@@ -59,7 +53,6 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy Bicep
-        id: bicep
         uses: azure/arm-deploy@v2
         with:
           scope:             resourcegroup
@@ -79,7 +72,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup .NET ${{ env.DOTNET_VERSION }}
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
@@ -89,11 +82,7 @@ jobs:
         run: dotnet restore ${{ env.PROJECT_PATH }}
 
       - name: Publish
-        run: >
-          dotnet publish ${{ env.PROJECT_PATH }}
-          --configuration Release
-          --no-restore
-          --output PubCrawl/Client/bin/Release/net10.0/publish
+        run: dotnet publish ${{ env.PROJECT_PATH }} --configuration Release --no-restore --output PubCrawl/Client/bin/Release/net10.0/publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -103,19 +92,11 @@ jobs:
           if-no-files-found: error
 
 # ── 3. DEPLOY ─────────────────────────────────────────────────────────────────
-# On main:  uses the token emitted by the provision job above (no secret needed)
-# On PR:    uses the AZURE_STATIC_WEB_APPS_API_TOKEN secret for preview envs
   deploy:
     name: Deploy to Azure Static Web App
     runs-on: ubuntu-latest
-    needs: [build, provision]
-    if: |
-      always() &&
-      needs.build.result == 'success' &&
-      (needs.provision.result == 'success' || needs.provision.result == 'skipped')
-    environment:
-      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
-      url:  ${{ steps.deploy.outputs.static_web_app_url }}
+    needs: build
+    if: github.event.action != 'closed'
 
     steps:
       - name: Download artifact
@@ -124,18 +105,10 @@ jobs:
           name: blazor-wasm
           path: ./wwwroot
 
-      - name: Deploy
-        id: deploy
+      - name: Deploy to Azure SWA
         uses: Azure/static-web-apps-deploy@v1
         with:
-          # Main branch: token comes from Bicep output via provision job.
-          # PR branches: token comes from the stored GitHub secret.
-          azure_static_web_apps_api_token: >-
-            ${{
-              needs.provision.outputs.swa_token != '' &&
-              needs.provision.outputs.swa_token ||
-              secrets.AZURE_STATIC_WEB_APPS_API_TOKEN
-            }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token:      ${{ secrets.GITHUB_TOKEN }}
           action:          upload
           app_location:    ./wwwroot
