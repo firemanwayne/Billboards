@@ -7,8 +7,8 @@
     },
     "customDomains": {
       "value": [
-        "williamgundersonfoundation.org",
-        "www.williamgundersonfoundation.org"
+        "www.williamgundersonfoundation.org",
+        "pubcrawl.williamgundersonfoundation.org"
       ]
     }
   }
