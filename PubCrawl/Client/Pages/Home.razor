@@ -74,11 +74,9 @@
                 @foreach (var e in _schedule)
                 {
                     <MudTimelineItem Color="@e.Color" Size="Size.Medium" Elevation="0">
-                        <ItemOpposite>
-                            <MudText Typo="Typo.overline" Color="Color.Warning" Class="lpc-tl-time-text">@e.Time</MudText>
-                        </ItemOpposite>
                         <ItemContent>
                             <MudPaper Class="lpc-tl-card" Elevation="0" Square="true">
+                                <MudText Typo="Typo.overline" Color="Color.Warning" Class="lpc-tl-time-text">@e.Time</MudText>
                                 <MudText Typo="Typo.h6" Class="@($"lpc-tl-title {(e.IsFeatured ? "lpc-tl-title--featured" : "")}")">@e.Icon&nbsp;@e.Title</MudText>
                                 <MudText Typo="Typo.body2" Class="lpc-tl-desc">@e.Description</MudText>
                             </MudPaper>
