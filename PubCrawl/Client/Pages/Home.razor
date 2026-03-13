@@ -162,7 +162,7 @@
                                 <MudText Typo="Typo.body2" Class="lpc-tk-card__body">
                                     Collect your Special Lucky 13 Challenge Coin — a keepsake for every crawl veteran.
                                 </MudText>
-                                <MudText Class="lpc-tk-card__handle mt-2">@@williamgundersonfoundation</MudText>
+                                <MudLink Href="@_wgfFacebookUrl" Target="_blank" Class="lpc-tk-card__handle mt-2">@@williamgundersonfoundation</MudLink>
                             </MudCardContent>
                         </MudCard>
 
@@ -221,7 +221,7 @@
                     William Gunderson Foundation — dedicated to lifting up firefighters
                     and their families in their greatest time of need.
                 </MudText>
-                <MudText Class="lpc-foundation__social mt-4">@@williamgundersonfoundation</MudText>
+                <MudLink Href="@_wgfFacebookUrl" Target="_blank" Class="lpc-foundation__social mt-4">@@williamgundersonfoundation</MudLink>
             </div>
         </MudContainer>
     </section>
@@ -246,6 +246,9 @@
 
     private const string _facebookUrl =
         "https://www.facebook.com/profile.php?id=100064388057098";
+
+    private const string _wgfFacebookUrl =
+        "https://www.facebook.com/profile.php?id=100083320545803";
 
     private record Venue(string Number, string Name, string Address = "", string Tag = "", bool IsStart = false);
     private record ScheduleItem(string Time, string Icon, string Title, string Description,
