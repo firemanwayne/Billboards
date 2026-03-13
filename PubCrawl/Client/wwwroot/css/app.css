@@ -102,7 +102,6 @@ a { color: inherit; text-decoration: none; }
 .lpc-hero {
     position: relative;
     width: 100%;
-    min-height: 100svh;
     background: var(--green-deep);
     display: flex;
     align-items: center;
@@ -112,28 +111,31 @@ a { color: inherit; text-decoration: none; }
 
 .lpc-hero__img-wrap {
     width: 100%;
-    height: 100%;
-    position: absolute;
-    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
 }
 
 .lpc-hero__img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
+    height: auto;
+    display: block;
 }
 
-/* On larger screens, show the image at natural proportions */
+/* On larger screens, cap height and contain */
 @media (min-width: 768px) {
+    .lpc-hero {
+        min-height: 100svh;
+    }
+    .lpc-hero__img-wrap {
+        position: absolute;
+        inset: 0;
+        height: 100%;
+    }
     .lpc-hero__img {
+        height: 100%;
         object-fit: contain;
         object-position: center;
-        background: var(--green-deep);
     }
 }
 
@@ -530,6 +532,7 @@ a { color: inherit; text-decoration: none; }
     background: linear-gradient(135deg, rgba(26,92,26,.06) 0%, transparent 60%);
     opacity: 0;
     transition: opacity .3s;
+    pointer-events: none;
 }
 .lpc-tk-card:hover {
     border-color: rgba(200,146,10,.5);
@@ -607,6 +610,43 @@ a { color: inherit; text-decoration: none; }
 .lpc-btn--outline:hover {
     background: var(--gold);
     color: var(--black);
+}
+
+/* Anchor buttons (reliable external link replacement for MudButton) */
+.lpc-anchor-btn {
+    display: block;
+    width: 100%;
+    padding: .75rem 1.2rem;
+    font-family: var(--font-heading);
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .2s, transform .2s, color .2s;
+    border-radius: 2px;
+    box-sizing: border-box;
+}
+.lpc-anchor-btn--filled {
+    background: var(--gold);
+    color: var(--black) !important;
+    border: 1px solid var(--gold);
+}
+.lpc-anchor-btn--filled:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+}
+.lpc-anchor-btn--outlined {
+    background: transparent;
+    color: var(--gold) !important;
+    border: 1px solid var(--gold);
+}
+.lpc-anchor-btn--outlined:hover {
+    background: var(--gold);
+    color: var(--black) !important;
+    transform: translateY(-2px);
 }
 
 /* QR Code card */
