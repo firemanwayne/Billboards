@@ -233,7 +233,7 @@
         <MudText Class="lpc-footer__shamrocks">☘ &nbsp; ☘ &nbsp; ☘</MudText>
         <MudText Class="lpc-footer__title">Lucky 13 Pub Crawl</MudText>
         <MudText Class="lpc-footer__sub">March 14th &nbsp;·&nbsp; Houston, TX &nbsp;·&nbsp; 10th Annual</MudText>
-        <MudText Class="lpc-footer__handle">@@lucky13pubcrawl</MudText>
+        <MudLink Href="@_facebookUrl" Target="_blank" Class="lpc-footer__handle">@@lucky13pubcrawl</MudLink>
         <MudDivider Class="lpc-footer__divider my-4" Style="max-width:60px;margin-left:auto;margin-right:auto;" />
         <MudText Class="lpc-footer__foundation">Proudly supporting the William Gunderson Foundation</MudText>
     </footer>
@@ -261,10 +261,10 @@
     [
         new("01", "American Legion Hall Post 560", "3720 Alba Drive · Houston, TX 77018",
             "Starting Point · Doors Open 12 PM", IsStart: true),
-        new("02", "Great Heights Brewery"),
+        new("02", "Great Heights Brewery", "938 Wakefield Dr · Houston, TX"),
         new("03", "William Price Distillery"),
-        new("04", "Walking Stick Brewery"),
-        new("05", "Wakefield Crowbar"),
+        new("04", "Walking Stick Brewery", "957 Wakefield Drive · Houston, TX"),
+        new("05", "Wakefield Crowbar", "954 Wakefield Dr · Houston, TX"),
     ];
 
     private readonly ScheduleItem[] _schedule =
