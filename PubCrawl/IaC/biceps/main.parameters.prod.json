@@ -6,7 +6,10 @@
       "value": "prod"
     },
     "customDomains": {
-      "value": []
+      "value": [
+        "williamgundersonfoundation.org",
+        "www.williamgundersonfoundation.org"
+      ]
     }
   }
 }
