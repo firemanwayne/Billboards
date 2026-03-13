@@ -119,9 +119,6 @@
                             <MudText Typo="Typo.h6" Class="lpc-tk-card__title mt-2">Buy Tickets</MudText>
                             <MudDivider Class="my-3 lpc-divider" />
 
-                            <MudText Typo="Typo.body2" Class="lpc-tk-card__body mb-1">
-                                Facebook: <strong>@@lucky13pubcrawl</strong>
-                            </MudText>
                             <MudText Typo="Typo.body2" Class="lpc-tk-card__body mb-3">
                                 Or purchase at the Door
                             </MudText>
@@ -132,8 +129,18 @@
                                        Color="Color.Warning"
                                        Size="Size.Large"
                                        FullWidth="true"
-                                       Class="lpc-btn-mud mb-3">
+                                       Class="lpc-btn-mud mb-2">
                                 Buy Tickets Online
+                            </MudButton>
+
+                            <MudButton Href="@_facebookUrl"
+                                       Target="_blank"
+                                       Variant="Variant.Outlined"
+                                       Color="Color.Warning"
+                                       Size="Size.Medium"
+                                       FullWidth="true"
+                                       Class="lpc-btn-mud mb-3">
+                                Follow on Facebook
                             </MudButton>
 
                             <MudDivider Class="my-3 lpc-divider" />
@@ -236,6 +243,9 @@
 @code {
     private const string _ticketUrl =
         "https://checkout.square.site/merchant/MLSB8E880AY47/checkout/BBFVAWKRAC7WDYNKQWQ4HXL6";
+
+    private const string _facebookUrl =
+        "https://www.facebook.com/profile.php?id=100064388057098";
 
     private record Venue(string Number, string Name, string Address = "", string Tag = "", bool IsStart = false);
     private record ScheduleItem(string Time, string Icon, string Title, string Description,
