@@ -39,7 +39,9 @@ resource staticWebApp 'Microsoft.Web/staticSites@2023-01-01' = {
 resource customDomainBindings 'Microsoft.Web/staticSites/customDomains@2023-01-01' = [for domain in customDomains: {
   name: domain
   parent: staticWebApp
-  properties: {}
+  properties: {
+    validationMethod: 'dns-txt-token'
+  }
 }]
 
 // ── Outputs ───────────────────────────────────────────────────────────────────
