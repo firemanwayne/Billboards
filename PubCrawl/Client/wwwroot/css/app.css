@@ -202,6 +202,12 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ─── TAGLINE BAND ───────────────────────────────────────── */
+.lpc-band--top {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
 .lpc-band {
     background: var(--gold);
     color: var(--black);
