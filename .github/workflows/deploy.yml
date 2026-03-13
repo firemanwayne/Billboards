@@ -59,7 +59,7 @@ jobs:
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           template:          ${{ env.BICEP_PATH }}
           parameters:        ${{ env.BICEP_PARAMS }}
-          deploymentName:    lucky13-pubcrawl-${{ github.run_number }}
+          deploymentName:    lucky13-${{ github.run_number }}-${{ github.run_attempt }}
           failOnStdErr:      false
 
 # ── 2. BUILD ──────────────────────────────────────────────────────────────────
