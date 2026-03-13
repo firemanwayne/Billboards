@@ -1,0 +1,274 @@
+@page "/"
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<PageTitle>Lucky 13 Pub Crawl — March 14th · Houston, TX</PageTitle>
+
+<div class="lpc-page">
+
+    <!-- ══════════════════════════════════════════
+         HERO — full-viewport advertisement image
+         ══════════════════════════════════════════ -->
+    <section class="lpc-hero">
+        <div class="lpc-hero__img-wrap">
+            <img src="images/031426_advertisement.jpg"
+                 alt="Lucky 13 Pub Crawl — March 14th, Houston TX"
+                 class="lpc-hero__img" />
+        </div>
+        <div class="lpc-hero__vignette"></div>
+        <div class="lpc-hero__scroll-cue">
+            <span class="lpc-hero__scroll-text">SCROLL</span>
+            <div class="lpc-hero__chevrons">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         TAGLINE BAND
+         ══════════════════════════════════════════ -->
+    <div class="lpc-band">
+        ☘&nbsp;&nbsp;10TH ANNIVERSARY &nbsp;•&nbsp; MARCH 14TH &nbsp;•&nbsp; HOUSTON, TX&nbsp;&nbsp;☘
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         VENUES
+         ══════════════════════════════════════════ -->
+    <section class="lpc-section lpc-venues reveal">
+        <MudContainer MaxWidth="MaxWidth.Large">
+            <MudText Typo="Typo.overline" Class="lpc-eyebrow">The Crawl</MudText>
+            <MudText Typo="Typo.h2" Class="lpc-heading mud-text-secondary mb-4">Five Legendary Stops</MudText>
+            <MudText Class="lpc-subhead">Begin at American Legion Hall and crawl through Houston's finest spots.</MudText>
+
+            <MudStack Spacing="0" Class="lpc-venues__stack">
+                @foreach (var v in _venues)
+                {
+                    <MudPaper Class="@($"lpc-venue-card {(v.IsStart ? "lpc-venue-card--start" : "")}")" Elevation="0" Square="true">
+                        <div class="lpc-venue-card__num">@v.Number</div>
+                        <div class="lpc-venue-card__body">
+                            <MudText Typo="Typo.h6" Class="lpc-venue-card__name">@v.Name</MudText>
+                            @if (!string.IsNullOrEmpty(v.Address))
+                            {
+                                <MudText Typo="Typo.body2" Class="lpc-venue-card__addr">@v.Address</MudText>
+                            }
+                            @if (!string.IsNullOrEmpty(v.Tag))
+                            {
+                                <MudChip T="string" Size="Size.Small" Color="Color.Warning" Variant="Variant.Filled" Class="lpc-venue-card__chip mt-1">@v.Tag</MudChip>
+                            }
+                        </div>
+                    </MudPaper>
+                }
+            </MudStack>
+        </MudContainer>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCHEDULE
+         ══════════════════════════════════════════ -->
+    <section class="lpc-section lpc-schedule reveal">
+        <MudContainer MaxWidth="MaxWidth.Large">
+            <MudText Typo="Typo.overline" Class="lpc-eyebrow">March 14th</MudText>
+            <MudText Typo="Typo.h2" Class="lpc-heading lpc-heading--light mb-6">The Day's Events</MudText>
+
+            <MudTimeline TimelinePosition="TimelinePosition.Left" Class="lpc-mud-timeline">
+                @foreach (var e in _schedule)
+                {
+                    <MudTimelineItem Color="@e.Color" Size="Size.Medium" Elevation="0">
+                        <ItemOpposite>
+                            <MudText Typo="Typo.overline" Color="Color.Warning" Class="lpc-tl-time-text">@e.Time</MudText>
+                        </ItemOpposite>
+                        <ItemContent>
+                            <MudPaper Class="lpc-tl-card" Elevation="0" Square="true">
+                                <MudText Typo="Typo.h6" Class="@($"lpc-tl-title {(e.IsFeatured ? "lpc-tl-title--featured" : "")}")">@e.Icon&nbsp;@e.Title</MudText>
+                                <MudText Typo="Typo.body2" Class="lpc-tl-desc">@e.Description</MudText>
+                            </MudPaper>
+                        </ItemContent>
+                    </MudTimelineItem>
+                }
+            </MudTimeline>
+        </MudContainer>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         FLAG PARALLAX
+         ══════════════════════════════════════════ -->
+    <section class="lpc-flag reveal">
+        <div class="lpc-flag__overlay">
+            <div class="lpc-flag__content">
+                <MudText Class="lpc-flag__badge">EST. 2014 &nbsp;•&nbsp; 10 YEARS STRONG</MudText>
+                <MudText Typo="Typo.h1" Class="lpc-flag__title">A Brotherhood<br />Tradition</MudText>
+                <MudText Class="lpc-flag__sub">Firefighters Helping Firefighters<br />Every St. Patrick's Day in Houston</MudText>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         TICKETS
+         ══════════════════════════════════════════ -->
+    <section class="lpc-section lpc-tickets reveal">
+        <MudContainer MaxWidth="MaxWidth.Large">
+            <MudText Typo="Typo.overline" Class="lpc-eyebrow">Get In</MudText>
+            <MudText Typo="Typo.h2" Class="lpc-heading mud-text-secondary mb-6">Tickets &amp; Extras</MudText>
+
+            <MudGrid Spacing="4">
+                <!-- Buy Tickets card -->
+                <MudItem xs="12" sm="12" md="5">
+                    <MudCard Class="lpc-tk-card lpc-tk-card--primary" Elevation="0" Square="true">
+                        <MudCardContent>
+                            <MudText Class="lpc-tk-card__icon">🎟️</MudText>
+                            <MudText Typo="Typo.h6" Class="lpc-tk-card__title mt-2">Buy Tickets</MudText>
+                            <MudDivider Class="my-3 lpc-divider" />
+
+                            <MudText Typo="Typo.body2" Class="lpc-tk-card__body mb-1">
+                                Facebook: <strong>@@lucky13pubcrawl</strong>
+                            </MudText>
+                            <MudText Typo="Typo.body2" Class="lpc-tk-card__body mb-3">
+                                Or purchase at the Door
+                            </MudText>
+
+                            <MudButton Href="@_ticketUrl"
+                                       Target="_blank"
+                                       Variant="Variant.Filled"
+                                       Color="Color.Warning"
+                                       Size="Size.Large"
+                                       FullWidth="true"
+                                       Class="lpc-btn-mud mb-3">
+                                Buy Tickets Online
+                            </MudButton>
+
+                            <MudDivider Class="my-3 lpc-divider" />
+
+                            <MudText Typo="Typo.overline" Class="lpc-qr-label mb-2">Scan to Buy</MudText>
+                            <div id="ticket-qr" class="lpc-qr-container"></div>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+
+                <!-- Right column: Challenge Coin + Shirt -->
+                <MudItem xs="12" sm="12" md="7">
+                    <MudStack Spacing="4">
+                        <MudCard Class="lpc-tk-card" Elevation="0" Square="true">
+                            <MudCardContent>
+                                <MudText Class="lpc-tk-card__icon">🪙</MudText>
+                                <MudText Typo="Typo.h6" Class="lpc-tk-card__title mt-2">Challenge Coin</MudText>
+                                <MudDivider Class="my-3 lpc-divider" />
+                                <MudText Typo="Typo.body2" Class="lpc-tk-card__body">
+                                    Collect your Special Lucky 13 Challenge Coin — a keepsake for every crawl veteran.
+                                </MudText>
+                                <MudText Class="lpc-tk-card__handle mt-2">@@williamgundersonfoundation</MudText>
+                            </MudCardContent>
+                        </MudCard>
+
+                        <MudCard Class="lpc-tk-card" Elevation="0" Square="true">
+                            <MudCardContent>
+                                <MudText Class="lpc-tk-card__icon">👕</MudText>
+                                <MudText Typo="Typo.h6" Class="lpc-tk-card__title mt-2">St. Patty's Day Shirt</MudText>
+                                <MudDivider Class="my-3 lpc-divider" />
+                                <MudText Typo="Typo.body2" Class="lpc-tk-card__body">
+                                    Official event shirts available through The Captain Renaud Foundation.
+                                </MudText>
+                                <MudText Class="lpc-tk-card__handle mt-2">thecaptainrenaudfoundation.org</MudText>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         HOTEL
+         ══════════════════════════════════════════ -->
+    <section class="lpc-section lpc-hotel reveal">
+        <MudContainer MaxWidth="MaxWidth.Medium">
+            <div class="lpc-hotel__inner">
+                <MudText Class="lpc-hotel__icon">🏨</MudText>
+                <MudText Typo="Typo.overline" Class="lpc-eyebrow lpc-eyebrow--gold">Official Hotel</MudText>
+                <MudText Typo="Typo.h2" Class="lpc-heading lpc-heading--light">Heritage Place Brookhollow</MudText>
+                <MudText Typo="Typo.body1" Class="lpc-hotel__addr mt-1">2504 North Loop West &nbsp;·&nbsp; Houston, TX 77092</MudText>
+                <MudText Typo="Typo.h5" Class="lpc-hotel__phone mt-2">(713) 688-7711</MudText>
+
+                <MudPaper Class="lpc-hotel__code-box mt-4" Elevation="0" Square="true">
+                    <MudText Typo="Typo.overline" Class="lpc-hotel__code-label">Special Rates · March 13th &amp; 14th</MudText>
+                    <MudText Class="lpc-hotel__code mt-1">CODE:&nbsp; HOUSTONFIREDEPT#13</MudText>
+                </MudPaper>
+            </div>
+        </MudContainer>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         FOUNDATION
+         ══════════════════════════════════════════ -->
+    <section class="lpc-section lpc-foundation reveal">
+        <MudContainer MaxWidth="MaxWidth.Medium">
+            <div class="lpc-foundation__inner">
+                <MudText Class="lpc-foundation__firefighter-icon">🔥</MudText>
+                <MudText Typo="Typo.overline" Class="lpc-eyebrow lpc-eyebrow--gold">Benefiting</MudText>
+                <MudText Typo="Typo.h2" Class="lpc-heading lpc-heading--light">
+                    William Gunderson<br />Foundation
+                </MudText>
+                <MudText Class="lpc-foundation__tagline mt-1">Firefighters Helping Firefighters</MudText>
+                <MudDivider Class="my-4 lpc-divider" Style="max-width:80px;margin-left:auto;margin-right:auto;" />
+                <MudText Typo="Typo.body1" Class="lpc-foundation__desc">
+                    Every ticket, every drink, every raffle entry directly supports the
+                    William Gunderson Foundation — dedicated to lifting up firefighters
+                    and their families in their greatest time of need.
+                </MudText>
+                <MudText Class="lpc-foundation__social mt-4">@@williamgundersonfoundation</MudText>
+            </div>
+        </MudContainer>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         FOOTER
+         ══════════════════════════════════════════ -->
+    <footer class="lpc-footer">
+        <MudText Class="lpc-footer__shamrocks">☘ &nbsp; ☘ &nbsp; ☘</MudText>
+        <MudText Class="lpc-footer__title">Lucky 13 Pub Crawl</MudText>
+        <MudText Class="lpc-footer__sub">March 14th &nbsp;·&nbsp; Houston, TX &nbsp;·&nbsp; 10th Annual</MudText>
+        <MudText Class="lpc-footer__handle">@@lucky13pubcrawl</MudText>
+        <MudDivider Class="lpc-footer__divider my-4" Style="max-width:60px;margin-left:auto;margin-right:auto;" />
+        <MudText Class="lpc-footer__foundation">Proudly supporting the William Gunderson Foundation</MudText>
+    </footer>
+
+</div>
+
+@code {
+    private const string _ticketUrl =
+        "https://checkout.square.site/merchant/MLSB8E880AY47/checkout/BBFVAWKRAC7WDYNKQWQ4HXL6";
+
+    private record Venue(string Number, string Name, string Address = "", string Tag = "", bool IsStart = false);
+    private record ScheduleItem(string Time, string Icon, string Title, string Description,
+                                 Color Color = Color.Success, bool IsFeatured = false);
+
+    private readonly Venue[] _venues =
+    [
+        new("01", "American Legion Hall Post 560", "3720 Alba Drive · Houston, TX 77018",
+            "Starting Point · Doors Open 12 PM", IsStart: true),
+        new("02", "Great Heights Brewery"),
+        new("03", "William Price Distillery"),
+        new("04", "Walking Stick Brewery"),
+        new("05", "Wakefield Crowbar"),
+    ];
+
+    private readonly ScheduleItem[] _schedule =
+    [
+        new("12:00 PM",    "🍺", "Doors Open",    "American Legion Hall Post 560 — The adventure begins!"),
+        new("12–2:30 PM",  "🏆", "Silent Auction", "Autographed Sports Memorabilia"),
+        new("2:45–3 PM",   "🎲", "Raffle",          "Custom Fire Helmets & Special Bottle Whiskey #13"),
+        new("All Day",     "🎶", "HFD Pipes & Drums Lead the Way!",
+            "Houston Fire Department's finest set the tone all day long",
+            Color: Color.Warning, IsFeatured: true),
+    ];
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("attachRevealObserver");
+            await JS.InvokeVoidAsync("generateQrCode", "ticket-qr", _ticketUrl, 180);
+        }
+    }
+
+    public async ValueTask DisposeAsync() { await ValueTask.CompletedTask; }
+}

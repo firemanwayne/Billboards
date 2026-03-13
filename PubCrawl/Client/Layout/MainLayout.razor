@@ -1,0 +1,77 @@
+@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="_theme" IsDarkMode="true" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+@Body
+
+@code {
+    private MudTheme _theme = new MudTheme
+    {
+        PaletteDark = new PaletteDark
+        {
+            Primary        = "#c8920a",
+            PrimaryDarken  = "#9a6e08",
+            PrimaryLighten = "#e8b020",
+            Secondary      = "#1a5c1a",
+            Background     = "#080c08",
+            Surface        = "#141a14",
+            DrawerBackground = "#0d2e0d",
+            AppbarBackground = "#0d2e0d",
+            TextPrimary    = "#f5ede0",
+            TextSecondary  = "rgba(245,237,224,0.65)",
+            ActionDefault  = "#c8920a",
+            LinesDefault   = "rgba(200,146,10,0.18)",
+            Divider        = "rgba(200,146,10,0.18)",
+            TableLines     = "rgba(200,146,10,0.18)",
+            OverlayDark    = "rgba(6,26,6,0.85)"
+        },
+        Typography = new Typography
+        {
+            Default = new DefaultTypography
+            {
+                FontFamily = ["EB Garamond", "Georgia", "serif"]
+            },
+            H1 = new H1Typography
+            {
+                FontFamily = ["Cinzel Decorative", "serif"],
+                FontSize   = "3rem",
+                FontWeight = "900"
+            },
+            H2 = new H2Typography
+            {
+                FontFamily = ["Cinzel Decorative", "serif"],
+                FontSize   = "2.2rem",
+                FontWeight = "700"
+            },
+            H3 = new H3Typography
+            {
+                FontFamily = ["Cinzel", "serif"],
+                FontSize   = "1.5rem",
+                FontWeight = "600"
+            },
+            H4 = new H4Typography
+            {
+                FontFamily = ["Cinzel", "serif"],
+                FontWeight = "600"
+            },
+            Button = new ButtonTypography
+            {
+                FontFamily   = ["Cinzel", "serif"],
+                FontWeight   = "700",
+                LetterSpacing = "0.12em"
+            },
+            Overline = new OverlineTypography
+            {
+                FontFamily    = ["Cinzel", "serif"],
+                LetterSpacing = "0.3em"
+            }
+        },
+        LayoutProperties = new LayoutProperties
+        {
+            DefaultBorderRadius = "2px"
+        }
+    };
+}

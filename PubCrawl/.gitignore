@@ -1,0 +1,22 @@
+# Visual Studio / IDE
+.vs/
+*.user
+*.suo
+.idea/
+
+# Build outputs
+**/bin/
+**/obj/
+
+# .NET
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Claude
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db

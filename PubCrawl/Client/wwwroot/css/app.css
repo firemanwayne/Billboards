@@ -1,0 +1,934 @@
+/* ─────────────────────────────────────────────────────────
+   LUCKY 13 PUB CRAWL — app.css
+   ───────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+
+/* ─── TOKENS ─────────────────────────────────────────────── */
+:root {
+    --green-deep:    #061a06;
+    --green-dark:    #0d2e0d;
+    --green-mid:     #1a5c1a;
+    --green-rich:    #226622;
+    --gold:          #c8920a;
+    --gold-light:    #e8b020;
+    --gold-pale:     #f5d060;
+    --amber:         #b85c00;
+    --black:         #080c08;
+    --charcoal:      #141a14;
+    --charcoal-mid:  #1e271e;
+    --cream:         #f5ede0;
+    --white:         #fdfaf5;
+    --font-display:  'Cinzel Decorative', serif;
+    --font-heading:  'Cinzel', serif;
+    --font-body:     'EB Garamond', serif;
+}
+
+/* ─── RESET / BASE ────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+/* ─── BLAZOR ERROR / LOADING (keep functional) ────────────── */
+#blazor-error-ui {
+    color-scheme: light only;
+    background: lightyellow;
+    bottom: 0; left: 0;
+    box-shadow: 0 -1px 2px rgba(0,0,0,.2);
+    display: none;
+    padding: .6rem 1.25rem .7rem;
+    position: fixed;
+    width: 100%;
+    z-index: 9999;
+}
+#blazor-error-ui .dismiss { cursor: pointer; position: absolute; right: .75rem; top: .5rem; }
+.blazor-error-boundary { background: #b32121; color: #fff; padding: 1rem 1rem 1rem 3.7rem; }
+.blazor-error-boundary::after { content: "An error has occurred." }
+
+.loading-progress {
+    position: absolute; display: block;
+    width: 8rem; height: 8rem;
+    inset: 20vh 0 auto 0; margin: 0 auto;
+}
+.loading-progress circle {
+    fill: none; stroke: #e0e0e0; stroke-width: .6rem;
+    transform-origin: 50% 50%; transform: rotate(-90deg);
+}
+.loading-progress circle:last-child {
+    stroke: var(--gold);
+    stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * .8), 500%;
+    transition: stroke-dasharray .05s ease-in-out;
+}
+.loading-progress-text {
+    position: absolute; text-align: center; font-weight: bold;
+    inset: calc(20vh + 3.25rem) 0 auto .2rem;
+    font-family: var(--font-heading); color: var(--gold-light);
+}
+.loading-progress-text::after { content: var(--blazor-load-percentage-text, "Loading"); }
+
+/* ─── PAGE WRAPPER ───────────────────────────────────────── */
+.lpc-page {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* ─── REVEAL ANIMATIONS ──────────────────────────────────── */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity .8s ease, transform .8s ease;
+}
+.reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ─── HERO ───────────────────────────────────────────────── */
+.lpc-hero {
+    position: relative;
+    width: 100%;
+    min-height: 100svh;
+    background: var(--green-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.lpc-hero__img-wrap {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.lpc-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+/* On larger screens, show the image at natural proportions */
+@media (min-width: 768px) {
+    .lpc-hero__img {
+        object-fit: contain;
+        object-position: center;
+        background: var(--green-deep);
+    }
+}
+
+.lpc-hero__vignette {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        transparent 60%,
+        rgba(6, 26, 6, .7) 85%,
+        var(--green-deep) 100%
+    );
+    pointer-events: none;
+}
+
+.lpc-hero__scroll-cue {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .4rem;
+    animation: fadeInUp 1.5s ease 1s both;
+}
+
+.lpc-hero__scroll-text {
+    font-family: var(--font-heading);
+    font-size: .65rem;
+    letter-spacing: .25em;
+    color: var(--gold-light);
+    opacity: .8;
+}
+
+.lpc-hero__chevrons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.lpc-hero__chevrons span {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-right: 2px solid var(--gold-light);
+    border-bottom: 2px solid var(--gold-light);
+    transform: rotate(45deg);
+    animation: chevronPulse 1.4s ease-in-out infinite;
+    opacity: 0;
+}
+.lpc-hero__chevrons span:nth-child(1) { animation-delay: 0s; }
+.lpc-hero__chevrons span:nth-child(2) { animation-delay: .2s; }
+.lpc-hero__chevrons span:nth-child(3) { animation-delay: .4s; }
+
+@keyframes chevronPulse {
+    0%   { opacity: 0; transform: rotate(45deg) translate(-4px, -4px); }
+    50%  { opacity: 1; }
+    100% { opacity: 0; transform: rotate(45deg) translate(4px, 4px); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ─── TAGLINE BAND ───────────────────────────────────────── */
+.lpc-band {
+    background: var(--gold);
+    color: var(--black);
+    text-align: center;
+    padding: .85rem 1rem;
+    font-family: var(--font-heading);
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ─── SHARED SECTION BASE ────────────────────────────────── */
+.lpc-section {
+    padding: 6rem 1.5rem;
+}
+
+.lpc-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.lpc-eyebrow {
+    font-family: var(--font-heading);
+    font-size: .7rem;
+    letter-spacing: .3em;
+    color: var(--gold-light);
+    margin-bottom: .6rem;
+    text-transform: uppercase;
+}
+.lpc-eyebrow--gold { color: var(--gold-pale); }
+
+.lpc-heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    color: var(--green-mid);
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+}
+.lpc-heading--light { color: var(--cream); }
+
+.lpc-subhead {
+    font-size: 1.1rem;
+    color: rgba(245,237,224,.7);
+    margin-bottom: 3rem;
+    max-width: 540px;
+}
+
+/* ─── VENUES ─────────────────────────────────────────────── */
+.lpc-venues {
+    background: var(--charcoal);
+    border-top: 1px solid rgba(200,146,10,.15);
+    border-bottom: 1px solid rgba(200,146,10,.15);
+}
+
+.lpc-venues .lpc-heading { color: var(--gold-light); }
+
+.lpc-venues__grid {
+    display: grid;
+    gap: 1px;
+}
+
+.lpc-venue-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.6rem 1.8rem;
+    background: var(--charcoal-mid);
+    border-left: 3px solid var(--green-mid);
+    transition: background .25s, border-color .25s;
+    position: relative;
+    overflow: hidden;
+}
+.lpc-venue-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(26,92,26,.08) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity .3s;
+}
+.lpc-venue-card:hover::before { opacity: 1; }
+.lpc-venue-card:hover { border-color: var(--gold); }
+
+.lpc-venue-card--start {
+    border-left-color: var(--gold);
+    background: linear-gradient(90deg, rgba(200,146,10,.06) 0%, var(--charcoal-mid) 50%);
+}
+
+.lpc-venue-card__num {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    color: rgba(200,146,10,.25);
+    line-height: 1;
+    min-width: 3rem;
+    flex-shrink: 0;
+}
+
+.lpc-venue-card--start .lpc-venue-card__num {
+    color: var(--gold);
+}
+
+.lpc-venue-card__name {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-bottom: .25rem;
+}
+
+.lpc-venue-card__addr {
+    font-size: .9rem;
+    color: rgba(245,237,224,.5);
+    margin-bottom: .35rem;
+}
+
+.lpc-venue-card__tag {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: .65rem;
+    letter-spacing: .15em;
+    color: var(--black);
+    background: var(--gold);
+    padding: .2rem .6rem;
+    border-radius: 2px;
+}
+
+/* ─── SCHEDULE ───────────────────────────────────────────── */
+.lpc-schedule {
+    background: var(--green-deep);
+    position: relative;
+}
+.lpc-schedule::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            rgba(26,92,26,.04) 0px,
+            rgba(26,92,26,.04) 1px,
+            transparent 1px,
+            transparent 60px
+        );
+    pointer-events: none;
+}
+
+.lpc-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 8rem;
+}
+
+.lpc-timeline::before {
+    content: '';
+    position: absolute;
+    left: 6.5rem;
+    top: .6rem;
+    bottom: .6rem;
+    width: 2px;
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--green-mid) 10%,
+        var(--green-mid) 90%,
+        transparent
+    );
+}
+
+.lpc-tl-item {
+    display: grid;
+    grid-template-columns: 1fr 0 1fr;
+    gap: 0 2rem;
+    align-items: start;
+    padding: 1.6rem 0;
+    position: relative;
+}
+
+.lpc-tl-time {
+    font-family: var(--font-heading);
+    font-size: .8rem;
+    letter-spacing: .08em;
+    color: var(--gold-light);
+    text-align: right;
+    padding-top: .15rem;
+    position: absolute;
+    left: -7rem;
+    width: 6rem;
+    top: 1.6rem;
+}
+
+.lpc-tl-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--green-mid);
+    border: 2px solid var(--green-rich);
+    position: absolute;
+    left: -1.55rem;
+    top: 1.75rem;
+    z-index: 1;
+    flex-shrink: 0;
+}
+.lpc-tl-dot--gold {
+    background: var(--gold);
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(200,146,10,.6);
+}
+
+.lpc-tl-body { padding-left: 0; }
+
+.lpc-tl-title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-bottom: .3rem;
+}
+
+.lpc-tl-desc {
+    font-size: .95rem;
+    color: rgba(245,237,224,.65);
+}
+
+.lpc-tl-item--feature .lpc-tl-title {
+    color: var(--gold-light);
+    font-size: 1.2rem;
+}
+.lpc-tl-item--feature .lpc-tl-desc { color: rgba(245,237,224,.8); }
+
+/* ─── FLAG PARALLAX ──────────────────────────────────────── */
+.lpc-flag {
+    position: relative;
+    min-height: 60vh;
+    background-image: url('/images/flag.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lpc-flag__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(6,26,6,.85) 0%,
+        rgba(6,26,6,.6) 50%,
+        rgba(8,12,8,.8) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lpc-flag__content {
+    text-align: center;
+    padding: 4rem 2rem;
+    max-width: 600px;
+}
+
+.lpc-flag__badge {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: .65rem;
+    letter-spacing: .3em;
+    color: var(--gold);
+    border: 1px solid rgba(200,146,10,.4);
+    padding: .4rem 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.lpc-flag__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,.6);
+}
+
+.lpc-flag__sub {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    letter-spacing: .08em;
+    color: rgba(245,237,224,.75);
+    line-height: 1.8;
+}
+
+/* ─── TICKETS ────────────────────────────────────────────── */
+.lpc-tickets {
+    background: var(--charcoal);
+    border-top: 1px solid rgba(200,146,10,.12);
+}
+
+.lpc-tickets .lpc-heading { color: var(--gold-light); }
+
+.lpc-tickets__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.lpc-tk-card {
+    background: var(--charcoal-mid);
+    border: 1px solid rgba(200,146,10,.15);
+    padding: 2rem 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .3s, transform .3s;
+}
+.lpc-tk-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(26,92,26,.06) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity .3s;
+}
+.lpc-tk-card:hover {
+    border-color: rgba(200,146,10,.5);
+    transform: translateY(-3px);
+}
+.lpc-tk-card:hover::after { opacity: 1; }
+
+.lpc-tk-card--primary {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(200,146,10,.08) 0%, var(--charcoal-mid) 60%);
+}
+.lpc-tk-card--primary::before {
+    content: 'FEATURED';
+    position: absolute;
+    top: 0; right: 0;
+    background: var(--gold);
+    color: var(--black);
+    font-family: var(--font-heading);
+    font-size: .55rem;
+    letter-spacing: .2em;
+    padding: .25rem .6rem;
+}
+
+.lpc-tk-card__icon { font-size: 2.2rem; margin-bottom: 1rem; }
+
+.lpc-tk-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-bottom: .75rem;
+}
+
+.lpc-tk-card__body {
+    font-size: .95rem;
+    color: rgba(245,237,224,.65);
+    margin-bottom: .3rem;
+}
+.lpc-tk-card__body strong { color: var(--cream); }
+
+.lpc-tk-card__handle {
+    font-family: var(--font-heading);
+    font-size: .85rem;
+    color: var(--gold-light);
+    margin-top: .5rem;
+}
+
+/* ─── TICKET BUTTONS ─────────────────────────────────────── */
+.lpc-btn {
+    display: inline-block;
+    margin-top: 1.2rem;
+    padding: .7rem 1.6rem;
+    background: var(--gold);
+    color: var(--black);
+    font-family: var(--font-heading);
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+    text-decoration: none;
+}
+.lpc-btn:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    color: var(--black);
+}
+
+.lpc-btn--outline {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+}
+.lpc-btn--outline:hover {
+    background: var(--gold);
+    color: var(--black);
+}
+
+/* QR Code card */
+.lpc-qr-wrap {
+    margin-top: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .6rem;
+}
+
+.lpc-qr-label {
+    font-family: var(--font-heading);
+    font-size: .65rem;
+    letter-spacing: .2em;
+    color: rgba(245,237,224,.5);
+    text-transform: uppercase;
+}
+
+#ticket-qr canvas,
+#ticket-qr img {
+    border: 4px solid var(--white);
+    border-radius: 4px;
+    background: var(--white);
+}
+
+/* ─── HOTEL ──────────────────────────────────────────────── */
+.lpc-hotel {
+    background: var(--green-deep);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.lpc-hotel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(26,92,26,.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.lpc-hotel__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lpc-hotel__icon { font-size: 3rem; margin-bottom: 1rem; }
+
+.lpc-hotel__addr {
+    font-size: 1.05rem;
+    color: rgba(245,237,224,.7);
+    margin-top: .5rem;
+}
+
+.lpc-hotel__phone {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--gold-light);
+    margin: .5rem 0 1.5rem;
+    letter-spacing: .06em;
+}
+
+.lpc-hotel__code-box {
+    border: 1px solid rgba(200,146,10,.35);
+    padding: 1.4rem 2.5rem;
+    text-align: center;
+    position: relative;
+}
+.lpc-hotel__code-box::before {
+    content: '★';
+    position: absolute;
+    top: -.7rem; left: 50%;
+    transform: translateX(-50%);
+    background: var(--green-deep);
+    color: var(--gold);
+    padding: 0 .5rem;
+    font-size: .8rem;
+}
+
+.lpc-hotel__code-label {
+    font-family: var(--font-heading);
+    font-size: .75rem;
+    letter-spacing: .2em;
+    color: rgba(245,237,224,.6);
+    margin-bottom: .6rem;
+    text-transform: uppercase;
+}
+
+.lpc-hotel__code {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--gold-pale);
+    letter-spacing: .1em;
+}
+
+/* ─── FOUNDATION ─────────────────────────────────────────── */
+.lpc-foundation {
+    background: var(--charcoal);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.lpc-foundation::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center bottom, rgba(26,92,26,.2) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+.lpc-foundation__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lpc-foundation__firefighter-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+
+.lpc-foundation__tagline {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    letter-spacing: .2em;
+    color: var(--gold-light);
+    margin-top: -.5rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.lpc-foundation__desc {
+    font-size: 1.1rem;
+    color: rgba(245,237,224,.72);
+    max-width: 580px;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.lpc-foundation__social {
+    font-family: var(--font-heading);
+    font-size: .85rem;
+    letter-spacing: .15em;
+    color: var(--gold-light);
+    border: 1px solid rgba(200,146,10,.3);
+    padding: .45rem 1.2rem;
+    display: inline-block;
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+.lpc-footer {
+    background: var(--black);
+    text-align: center;
+    padding: 4rem 1.5rem 3rem;
+    border-top: 1px solid rgba(200,146,10,.2);
+}
+
+.lpc-footer__shamrocks {
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+    opacity: .6;
+}
+
+.lpc-footer__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--gold);
+    margin-bottom: .4rem;
+}
+
+.lpc-footer__sub {
+    font-family: var(--font-heading);
+    font-size: .8rem;
+    letter-spacing: .15em;
+    color: rgba(245,237,224,.5);
+    margin-bottom: .6rem;
+}
+
+.lpc-footer__handle {
+    font-family: var(--font-heading);
+    font-size: .85rem;
+    color: var(--gold-light);
+    margin-bottom: 1.5rem;
+}
+
+.lpc-footer__divider {
+    width: 60px;
+    height: 1px;
+    background: rgba(200,146,10,.3);
+    margin: 1.5rem auto;
+}
+
+.lpc-footer__foundation {
+    font-size: .85rem;
+    color: rgba(245,237,224,.4);
+    font-style: italic;
+}
+
+/* ─── MUDBLAZOR OVERRIDES ────────────────────────────────── */
+
+/* Reset MudBlazor body defaults */
+.mud-typography-body1, .mud-typography-body2 {
+    font-family: var(--font-body) !important;
+}
+
+.mud-typography-h1, .mud-typography-h2 {
+    font-family: var(--font-display) !important;
+}
+
+.mud-typography-h3, .mud-typography-h4,
+.mud-typography-h5, .mud-typography-h6,
+.mud-typography-overline {
+    font-family: var(--font-heading) !important;
+}
+
+/* Venue cards */
+.lpc-venues__stack > * + * { margin-top: 1px; }
+
+.mud-paper.lpc-venue-card {
+    background: var(--charcoal-mid) !important;
+    border-left: 3px solid var(--green-mid) !important;
+    transition: background .25s, border-color .25s;
+}
+.mud-paper.lpc-venue-card:hover {
+    border-left-color: var(--gold) !important;
+}
+.mud-paper.lpc-venue-card--start {
+    border-left-color: var(--gold) !important;
+    background: linear-gradient(90deg, rgba(200,146,10,.06) 0%, var(--charcoal-mid) 60%) !important;
+}
+
+/* MudTimeline cleanup */
+.lpc-mud-timeline .mud-timeline-item-dot { background: transparent !important; }
+.lpc-tl-card {
+    background: transparent !important;
+    padding: .5rem 0 1rem;
+}
+.lpc-tl-title { color: var(--cream) !important; }
+.lpc-tl-title--featured { color: var(--gold-light) !important; }
+.lpc-tl-desc { color: rgba(245,237,224,.65) !important; }
+.lpc-tl-time-text { color: var(--gold-light) !important; }
+
+/* Ticket cards */
+.mud-card.lpc-tk-card {
+    background: var(--charcoal-mid) !important;
+    border: 1px solid rgba(200,146,10,.18) !important;
+    transition: border-color .3s, transform .3s;
+}
+.mud-card.lpc-tk-card:hover {
+    border-color: rgba(200,146,10,.5) !important;
+    transform: translateY(-3px);
+}
+.mud-card.lpc-tk-card--primary {
+    border-color: var(--gold) !important;
+    background: linear-gradient(135deg, rgba(200,146,10,.07) 0%, var(--charcoal-mid) 60%) !important;
+    position: relative;
+}
+.mud-card.lpc-tk-card--primary::before {
+    content: 'FEATURED';
+    position: absolute;
+    top: 0; right: 0;
+    background: var(--gold);
+    color: var(--black);
+    font-family: var(--font-heading);
+    font-size: .55rem;
+    letter-spacing: .2em;
+    padding: .25rem .6rem;
+    z-index: 1;
+}
+
+.lpc-btn-mud {
+    border-radius: 2px !important;
+    font-family: var(--font-heading) !important;
+    letter-spacing: .12em !important;
+    color: var(--black) !important;
+}
+.lpc-btn-mud:hover { transform: translateY(-2px); }
+
+.lpc-divider { border-color: rgba(200,146,10,.2) !important; }
+
+/* Hotel code box */
+.mud-paper.lpc-hotel__code-box {
+    background: transparent !important;
+    border: 1px solid rgba(200,146,10,.35) !important;
+}
+
+/* QR code */
+.lpc-qr-container {
+    display: inline-block;
+    padding: 6px;
+    background: var(--white);
+    border-radius: 4px;
+}
+.lpc-qr-label {
+    font-family: var(--font-heading) !important;
+    font-size: .65rem !important;
+    letter-spacing: .2em !important;
+    color: rgba(245,237,224,.5) !important;
+    display: block;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .lpc-section { padding: 4rem 1.2rem; }
+    .lpc-flag { background-attachment: scroll; }
+
+    .lpc-timeline {
+        padding-left: 0;
+    }
+    .lpc-timeline::before { display: none; }
+
+    .lpc-tl-item {
+        padding: 1rem 0;
+    }
+
+    .lpc-tl-time {
+        position: static;
+        width: auto;
+        text-align: left;
+        margin-bottom: .3rem;
+    }
+    .lpc-tl-dot { display: none; }
+
+    .lpc-hotel__code-box { padding: 1rem 1.2rem; }
+
+    .lpc-band { white-space: normal; font-size: .65rem; }
+}
+
+@media (min-width: 768px) {
+    .lpc-venues__grid {
+        grid-template-columns: 1fr;
+    }
+}
