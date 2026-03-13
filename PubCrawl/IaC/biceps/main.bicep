@@ -11,8 +11,8 @@ targetScope = 'resourceGroup'
 @allowed(['prod', 'staging', 'dev'])
 param environment string = 'prod'
 
-@description('Azure region for deployment')
-param location string = resourceGroup().location
+@description('Azure region for deployment — must be a region that supports Microsoft.Web/staticSites')
+param location string = 'eastus2'
 
 @description('Custom domain hostnames. DNS CNAME records must exist first.')
 param customDomains array = []
