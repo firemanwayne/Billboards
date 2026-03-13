@@ -14,6 +14,9 @@ param environment string = 'prod'
 @description('Azure region for deployment — must be a region that supports Microsoft.Web/staticSites')
 param location string = 'eastus2'
 
+@description('Unique suffix for deployment name — defaults to current UTC time')
+param deploymentTime string = utcNow()
+
 @description('Custom domain hostnames. DNS CNAME records must exist first.')
 param customDomains array = []
 
@@ -32,7 +35,7 @@ var commonTags = {
 // ── Modules ───────────────────────────────────────────────────────────────────
 
 module swa 'modules/staticWebApp.bicep' = {
-  name: '${appName}-deploy'
+  name: '${appName}-${deploymentTime}'
   params: {
     name: appName
     location: location
