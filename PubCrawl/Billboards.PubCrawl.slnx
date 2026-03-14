@@ -1,4 +1,12 @@
 <Solution>
+  <Folder Name="/IaC/" />
+  <Folder Name="/IaC/bicep/">
+    <File Path="IaC/biceps/main.bicep" />
+    <File Path="IaC/biceps/main.parameters.prod.json" />
+  </Folder>
+  <Folder Name="/IaC/bicep/modules/">
+    <File Path="IaC/biceps/modules/staticWebApp.bicep" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.github/workflows/deploy.yml" />
   </Folder>
