@@ -43,23 +43,59 @@
             <MudStack Spacing="0" Class="lpc-venues__stack">
                 @foreach (var v in _venues)
                 {
-                    <MudPaper Class="@($"lpc-venue-card {(v.IsStart ? "lpc-venue-card--start" : "")}")" Elevation="0" Square="true">
-                        <div class="lpc-venue-card__num">@v.Number</div>
-                        <div class="lpc-venue-card__body">
-                            <MudText Typo="Typo.h6" Class="lpc-venue-card__name">@v.Name</MudText>
-                            @if (!string.IsNullOrEmpty(v.Address))
-                            {
-                                <MudText Typo="Typo.body2" Class="lpc-venue-card__addr">@v.Address</MudText>
-                            }
-                            @if (!string.IsNullOrEmpty(v.Tag))
-                            {
-                                <MudChip T="string" Size="Size.Small" Color="Color.Warning" Variant="Variant.Filled" Class="lpc-venue-card__chip mt-1">@v.Tag</MudChip>
-                            }
-                        </div>
-                    </MudPaper>
+                    <div>
+                        <MudPaper Class="@($"lpc-venue-card {(v.IsStart ? "lpc-venue-card--start" : "")} lpc-venue-card--clickable")"
+                                  Elevation="0" Square="true"
+                                  @onclick="() => ToggleVenue(v.Number)">
+                            <div class="lpc-venue-card__num">@v.Number</div>
+                            <div class="lpc-venue-card__body">
+                                <MudText Typo="Typo.h6" Class="lpc-venue-card__name">@v.Name</MudText>
+                                @if (!string.IsNullOrEmpty(v.Address))
+                                {
+                                    <MudText Typo="Typo.body2" Class="lpc-venue-card__addr">@v.Address</MudText>
+                                }
+                                @if (!string.IsNullOrEmpty(v.Tag))
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Warning" Variant="Variant.Filled" Class="lpc-venue-card__chip mt-1">@v.Tag</MudChip>
+                                }
+                            </div>
+                            <div class="lpc-venue-card__expand-icon">
+                                @(_expandedVenue == v.Number ? "▲" : "▼")
+                            </div>
+                        </MudPaper>
+                        <MudCollapse Expanded="@(_expandedVenue == v.Number)">
+                            <div class="lpc-venue-map">
+                                <img src="images/stop_@(int.Parse(v.Number)).png"
+                                     alt="Map for @v.Name"
+                                     class="lpc-venue-map__img @(v.Number == "04" ? "lpc-venue-map__img--offset-bottom" : "")" />
+                            </div>
+                        </MudCollapse>
+                    </div>
                 }
             </MudStack>
         </MudContainer>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         PHOTO CAROUSEL
+         ══════════════════════════════════════════ -->
+    <section class="lpc-carousel-section reveal">
+        <MudCarousel TData="string"
+                     ItemsSource="@_carouselImages"
+                     AutoCycle="true"
+                     AutoCycleTime="TimeSpan.FromSeconds(4)"
+                     ShowArrows="true"
+                     ShowBullets="true"
+                     BulletsColor="Color.Warning"
+                     Style="height: 600px; width: 100%;"
+                     Class="lpc-carousel">
+            <ItemTemplate Context="img">
+                <div class="lpc-carousel__slide">
+                    <img src="@img" alt="Lucky 13 Pub Crawl" class="lpc-carousel__img" />
+                    <div class="lpc-carousel__overlay"></div>
+                </div>
+            </ItemTemplate>
+        </MudCarousel>
     </section>
 
     <!-- ══════════════════════════════════════════
@@ -244,6 +280,21 @@
     private record Venue(string Number, string Name, string Address = "", string Tag = "", bool IsStart = false);
     private record ScheduleItem(string Time, string Icon, string Title, string Description,
                                  Color Color = Color.Success, bool IsFeatured = false);
+
+    private string? _expandedVenue;
+    private void ToggleVenue(string number) =>
+        _expandedVenue = _expandedVenue == number ? null : number;
+
+    private readonly string[] _carouselImages =
+    [
+        "images/pubcrawl_25_001.jpg",
+        "images/pubcrawl_25_002.jpg",
+        "images/pubcrawl_25_003.jpg",
+        "images/pubcrawl_25_004.jpg",
+        "images/pubcrawl_25_005.jpg",
+        "images/pubcrawl_25_006.jpg",
+        "images/pubcrawl_25_007.jpg",
+    ];
 
     private readonly Venue[] _venues =
     [
